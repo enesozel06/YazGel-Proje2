@@ -17,3 +17,14 @@ APIderslik.py : Uzantı olarak gönderdiğiniz derslik adı ile o dersliğe ait 
 Veri tabanı hatalarını aldığınız takdirde DtSifirla.py dosyasını çalıştırarark veri tabanını sıfırlayabilirsiniz. Proramın çalıştığı ders_programi.py dosyası başlangıçta verileri tekrar doldurduğu için yapacağınız işlem sonrasında verileriniz tekrar gelecektir. 
 
 Veri ekleme yaparken veri tabanında yer aldığı gibi gün isimlerini girmeniz gerekmektedir. Aynı gün aynı saatte aynı derslikte ders eklemesi yapılmamaktadır. Aynı gün aynı saatte ders eklemenin tek yolu farklı bir derslikte olmasıdır.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Ar Haftalık ders programı uygulaması(+20 Puan)
+
+Proje Özeti 
+Bu proje, Kocaeli Üniversitesi dersliklerinin haftalık ders programlarını gösteren bir artırılmış gerçeklik (AR) uygulamasını içermektedir. Unity oyun motoru kullanılarak geliştirilmiş ve SQL Server üzerindeki veritabanından ders programı bilgilerini API aracılığıyla çekmektedir.Projede Bir adet side bar bulunmaktadır bu menü aracılığı ile kullanıcı istediği dersliğe tıkladığında ekrana seçilen dersilin haftalık dersleri, saatleri ve derslik bilgileri gelmektedir 
+
+Geliştirme Ortamı
+Unity 3D v2021.2.3f1
+C# Programlama Dili(web api)
+SQL Server
