@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS HocaDers (
+        HocaID INTEGER PRIMARY KEY,
+        HocaAdi TEXT,
+        DersID INTEGER,
+        DersAdi TEXT
+    )
+
+        CREATE TABLE IF NOT EXISTS Kisitlar (
+        HocaID INTEGER,
+        HaftaninGunu TEXT,
+        SaatAraligi TEXT,
+        Sinif TEXT,
+        PRIMARY KEY (HocaID, HaftaninGunu, SaatAraligi)
+    )
+
+    INSERT INTO HocaDers (HocaAdi, DersID, DersAdi) VALUES (?, ?, ?)
+''', [('Hoca1', 1, 'Matematik'), ('Hoca2', 2, 'Fizik'), ('Hoca3', 3, 'Kimya')]
+
+''
+    INSERT INTO Kisitlar (HocaID, HaftaninGunu, SaatAraligi, Sinif) VALUES (?, ?, ?, ?)
+''', [(1, 'Pazartesi', '09:00-12:00', 'A101'), (2, 'Çarşamba', '14:00-17:00', 'B202')]

@@ -1,0 +1,156 @@
+from flask import Flask, render_template, request, redirect, url_for 
+app = Flask(__name__, static_folder='static', static_url_path='/static')
+app = Flask(__name__)
+import sqlite3
+
+
+# Veritabanını oluştur ve başlangıç verilerini ekle
+def create_tables(conn):
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS HocaDers (
+            HocaID INTEGER PRIMARY KEY,
+            HocaAdi TEXT,
+            DersID INTEGER,
+            DersAdi TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Kisitlar (
+            HocaID INTEGER,
+            HaftaninGunu TEXT,
+            SaatAraligi TEXT,
+            Kac TEXT,
+            Sinif TEXT,
+            PRIMARY KEY (HocaID, HaftaninGunu, SaatAraligi, Kac, Sinif),
+            FOREIGN KEY (HocaID) REFERENCES HocaDers(HocaID)
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Siniflar (
+            SinifID INTEGER PRIMARY KEY,
+            SinifAdi TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        INSERT INTO HocaDers (HocaAdi, DersID, DersAdi) VALUES
+            ('Serdar Solak', 1, 'BSM-Giriş'),
+            ('Süleyman Eken', 2, 'Proje-A'),
+            ('Yavuz Selim FATİHOĞLU', 3, 'Yaz-Gel'),
+            ('Hikmet Hakan GÜREL', 4, 'Fizik'),
+            ('Yavuz Selim FATİHOĞLU', 5, 'Algoritma Programlama'),
+            ('Prof. Dr. Hikmet Hakan GÜREL', 6, 'Fizik'),
+            ('Doç. Dr. Vildan ÇETKİN', 7, 'Diferansiyel Denklemler'),
+            ('Öğr. Gör. Kerem ÇOLAK', 8, 'İşletme Ekonomisi'),
+            ('Dr. Öğr. Üyesi Önder YAKUT', 9, 'Web Tasarımı')
+    ''')
+
+    cursor.execute('''
+        INSERT INTO Kisitlar (HocaID, HaftaninGunu, SaatAraligi, Kac, Sinif) VALUES
+            (1, 'Cuma', '10:00-12:00', '1.Sınıf', 'A103'),
+            (3, 'Cuma', '15:00-17:00', '1.Sınıf', 'B202'),
+            (5, 'Pazartesi', '14:00-16:50', '1.Sınıf', '1040'),
+            (4, 'Pazartesi', '10:00-12:50', '1.Sınıf', '1040'),
+            (3, 'Sali', '10:00-12:50', '1.Sınıf', '1044'),
+            (2, 'Cuma', '10:00-12:50', '1.Sınıf', '1044'),
+            (6, 'Pazartesi', '09:00-12:50', '1.Sınıf', '1044'),
+            (7, 'Çarşamba', '14:00-15:50', '1.Sınıf', '1041'),
+            (8, 'Pazartesi', '09:00-10:50', '1.Sınıf', '1036')
+    ''')
+
+    cursor.execute('''
+        INSERT INTO Siniflar (SinifAdi) VALUES
+            ('1044'),
+            ('1040'),
+            ('1036'),
+            ('1041')
+    ''')
+
+    conn.commit()
+
+# Ana sayfa
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'ekle':
+            # Formdan gelen verileri al
+            hoca_adi = request.form['hoca_adi']
+            ders_adi = request.form['ders_adi']
+            gun = request.form['gun']
+            saat = request.form['saat']
+            Kac =  saat = request.form['Kac']
+            sinif = request.form['sinif']
+
+            # SQLite veritabanına bağlan
+            conn = sqlite3.connect('ders_programi.db')
+            cursor = conn.cursor()
+
+            # Hoca ve Ders Bilgileri Tablosu'na veri ekle
+            cursor.execute('INSERT INTO HocaDers (HocaAdi, DersAdi) VALUES (?, ?)', (hoca_adi, ders_adi))
+            conn.commit()
+
+            # Eklenen kaydın ID'sini al
+            cursor.execute('SELECT last_insert_rowid()')
+            hoca_id = cursor.fetchone()[0]
+
+            # Kısıtlar Tablosu'na veri ekle
+            cursor.execute('INSERT INTO Kisitlar (HocaID, HaftaninGunu, SaatAraligi, Kac, Sinif) VALUES (?, ?, ?, ?, ?)', (hoca_id, gun, saat, Kac, sinif))
+            conn.commit()
+
+            # Veritabanı bağlantısını kapat
+            conn.close()
+
+        elif action == 'guncelle':
+            # Formdan gelen verileri al
+            hoca_id = request.form['hoca_id']
+            gun = request.form['gun']
+            saat = request.form['saat']
+            Kac =  saat = request.form['Kac']
+            sinif = request.form['sinif']
+
+            # SQLite veritabanına bağlan
+            conn = sqlite3.connect('ders_programi.db')
+            cursor = conn.cursor()
+
+            # Kısıtlar Tablosu'nu güncelle
+            cursor.execute('UPDATE Kisitlar SET HaftaninGunu=?, SaatAraligi=?, Kac=?, Sinif=? WHERE HocaID=?', (gun, saat, Kac, sinif, hoca_id))
+            conn.commit()
+
+            # Veritabanı bağlantısını kapat
+            conn.close()
+
+        # İşlem tamamlandıktan sonra ana sayfaya yönlendir
+        return redirect(url_for('index'))
+
+    # SQLite veritabanına bağlan
+    conn = sqlite3.connect('ders_programi.db')
+    cursor = conn.cursor()
+
+    # Eğer tablo oluşturulmamışsa ve başlangıç verileri eklenmemişse
+    cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="HocaDers"')
+    table_exists = cursor.fetchone()
+
+    if not table_exists:
+        create_tables(conn)
+
+    # Hoca ve Ders Bilgileri Tablosu
+    cursor.execute('SELECT HocaID, HocaAdi, DersAdi FROM HocaDers')
+    hoca_dersleri = cursor.fetchall()
+
+    # Kısıtlar Tablosu
+    cursor.execute('SELECT HocaID, HaftaninGunu, SaatAraligi, Kac, Sinif FROM Kisitlar')
+    kisitlar = cursor.fetchall()
+
+    # Veritabanı bağlantısını kapat
+    conn.close()
+
+    return render_template('index.html', hoca_dersleri=hoca_dersleri, kisitlar=kisitlar)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
