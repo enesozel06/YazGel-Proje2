@@ -1,0 +1,94 @@
+/* styles.css */
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: #4CAF50;
+  text-align: center;
+}
+
+h2 {
+  color: #4CAF50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+form {
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 350px; /* Adjust as needed */
+  font-family: sans-serif;
+}
+
+input, select, button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #4CAF50;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+button:hover {
+  background-color: #3e8e41;
+}
+  /* Input placeholder styling */
+  ::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+  
+  /* Error styling (optional) */
+  .error {
+    color: red;
+    margin-top: 5px;
+    font-size: smaller;
+  }
+  /* Form spacing */
+form > * {
+    margin-bottom: 10px;
+  }
+  
+  /* Input and select focus styling */
+  input[type="text"]:focus,
+  select:focus {
+    outline: none;
+    border-color: #3e8e41;
+  }
+  
+  /* Button hover effect */
+  button:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
