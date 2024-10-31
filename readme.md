@@ -1,4 +1,4 @@
-Yazılım geliştirme laboratuvarı. - 2. Projesi 181307008-181307050
+Yazılım geliştirme laboratuvarı. - 2. Projesi 181307008
 
 Ders veren hocaların kısıtları (aynı hocanın derslerinin cakismamasi, hocanın dersini
 istenilen gune atama, sınıf sayıları-isimleri gibi) dikkate alınarak çizge renklendirme
